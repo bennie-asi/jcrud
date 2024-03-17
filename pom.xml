@@ -1,11 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>xyz._990904</groupId>
+    <groupId>xyz.990904.jcrud</groupId>
     <artifactId>jcrud</artifactId>
     <version>1.0.0</version>
     <name>Jcrud</name>
+    <description>Jcrud is a Maven project based on Spring and Mybatis, which enhances the function of Mybatis
+    </description>
+    <url>https://github.com/bennie-asi/jcrud</url>
 
+    <scm>
+        <connection>scm:git:git@github.com:bennie-asi/jcrud.git</connection>
+        <developerConnection>scm:git:git@github.com:bennie-asi/jcrud.git</developerConnection>
+        <url>https://github.com/bennie-asi/jcrud</url>
+        <tag>1.0</tag>
+    </scm>
     <properties>
         <spring.version>5.3.30</spring.version>
         <lombok.version>1.18.30</lombok.version>
@@ -15,7 +24,26 @@
         <guava.version>32.1.3-jre</guava.version>
         <persistence.api.version>1.0</persistence.api.version>
         <slf4j.vserion>1.7.12</slf4j.vserion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
+    <developers>
+        <developer>
+            <name>bennie</name>
+            <email>1820313040@qq.com</email>
+            <organization>bennie</organization>
+            <url>https://github.com/bennie-asi/jcrud</url>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>jcrud</distribution>
+        </license>
+    </licenses>
+
 
     <dependencies>
         <!--        spring-->
@@ -77,6 +105,12 @@
             <version>${persistence.api.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -125,26 +159,42 @@
                         </goals>
                         <configuration>
                             <additionalparam>-Xdoclint:none</additionalparam>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                            <!--                            <outputDirectory>${basedir}/target/javadoc</outputDirectory>-->
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                </configuration>
+            </plugin>
 
-            <!-- GPG -->
-            <!-- <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-gpg-plugin</artifactId>
-              <version>1.5</version>
-              <executions>
-                <execution>
-                  <id>sign-artifacts</id>
-                  <phase>verify</phase>
-                  <goals>
-                    <goal>sign</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin> -->
+            <!--             GPG-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <!--   没有配置环境变量，可知道GnuPG路径 -->
+                    <executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -161,15 +211,15 @@
             </plugin>
 
             <!-- JNA -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <environmentVariables>
-                        <LD_LIBRARY_PATH>/usr/local/lib</LD_LIBRARY_PATH>
-                    </environmentVariables>
-                </configuration>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <environmentVariables>-->
+            <!--                        <LD_LIBRARY_PATH>/usr/local/lib</LD_LIBRARY_PATH>-->
+            <!--                    </environmentVariables>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -179,19 +229,4 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <!-- 这个id需要在setting.xml中设置  -->
-            <id>oss</id>
-            <name>OSS Snapshots Repository</name>
-            <!-- 这里的url就是Issue中回复的snapshots 的repo地址-->
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>oss</id>
-            <name>OSS Staging Repository</name>
-            <!-- 这里的url就是Issue中回复的staging 的repo地址-->
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 </project>
